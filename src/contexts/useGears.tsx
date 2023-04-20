@@ -5,12 +5,16 @@ import {
   useReducer
 } from "react";
 
-import Gear from "../lib/Gear";
+import Gear from "@model/GearModel";
 
 interface GearsContext {
   gears: Gear[];
   addGear(): void;
-  editGear(id: number, key: string, value: number): void;
+  editGear(
+    id: number,
+    key: "speed" | "shift" | "radius" | "displacement",
+    value: number
+  ): void;
   removeGear(id: number): void;
 }
 
@@ -22,10 +26,9 @@ interface AddGearAction {
 }
 
 interface EditGearAction {
-  type: "edit:gear";
+  type: "edit:speed" | "edit:shift" | "edit:radius" | "edit:displacement";
   value: {
     id: number;
-    key: string;
     value: number;
   };
 }
@@ -46,8 +49,20 @@ function GearsReducer(
       newState.push(action.value);
       break;
 
-    case "edit:gear":
-      newState[action.value.id][action.value.key] = action.value.value;
+    case "edit:speed":
+      newState[action.value.id].speed = action.value.value;
+      break;
+
+    case "edit:shift":
+      newState[action.value.id].shift = action.value.value;
+      break;
+
+    case "edit:radius":
+      newState[action.value.id].radius = action.value.value;
+      break;
+
+    case "edit:displacement":
+      newState[action.value.id].displacement = action.value.value;
       break;
 
     case "remove:gear":
@@ -74,8 +89,8 @@ export function GearsProvider({ children }: PropsWithChildren) {
     },
     editGear(id, key, value) {
       dispatch({
-        type: "edit:gear",
-        value: { id, key, value }
+        type: `edit:${key}`,
+        value: { id, value }
       });
     },
     removeGear(id) {

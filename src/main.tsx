@@ -2,9 +2,10 @@ import ReactDOM from "react-dom/client";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import { GearsProvider } from "./contexts/useGears";
-import App from "./components/App";
-import Gear from "./lib/Gear";
+import { GearsProvider } from "@contexts/useGears";
+import App from "@pages/App";
+import Renderer from "@lib/Renderer";
+import SpirographModel from "@model/SpirographModel";
 
 import "./index.css";
 
@@ -26,42 +27,41 @@ window.onresize = function () {
 
 let i: number = 0;
 
-function render(ctx: CanvasRenderingContext2D, gears: Gear[]) {
-  ctx.fillStyle = "gray";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.fillStyle = "gray";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.strokeStyle = "red";
+const spirograph = new SpirographModel();
 
-  let _x = 0;
-  let _y = 0;
+function render(ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = "red";
 
-  for (const gear of gears) {
-    const { x, y } = gear.evaluate(i);
+  const center = {
+    x: canvas.width / 2,
+    y: canvas.height / 2
+  };
 
-    ctx.beginPath();
-    ctx.arc(
-      canvas.width / 2 + _x,
-      canvas.height / 2 + _y,
-      gear.radius,
-      0,
-      2 * Math.PI
-    );
-    ctx.stroke();
+  const { x, y } = spirograph.evaluate(i, center);
 
-    _x += x;
-    _y += y;
-  }
+  ctx.beginPath();
+  ctx.arc(x, y, 1, 0, 2 * Math.PI);
+  ctx.fill();
 
   i += 1 / 60;
-
-  requestAnimationFrame(() => render(ctx, gears));
 }
+
+let n: Renderer | null = null;
 
 ReactDOM.createRoot(ui).render(
   <GearsProvider>
     <App
       onHide={(gears) => {
-        render(ctx, gears);
+        if (n) n.disable();
+
+        spirograph.gears = gears;
+
+        n = new Renderer();
+
+        n.render(() => render(ctx));
       }}
     />
   </GearsProvider>

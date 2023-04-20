@@ -3,7 +3,7 @@ import { PropsWithChildren } from "react";
 
 interface SideMenuProps {
   show: boolean;
-  onHide: () => void;
+  onHide(): void;
 }
 
 export default function SideMenu({

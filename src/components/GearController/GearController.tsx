@@ -4,17 +4,21 @@ import { BsTrashFill } from "react-icons/bs";
 
 interface GearControllerProps {
   gear: Gear;
-  onChange(key: string, value: number): void;
+  onChange(
+    key: "speed" | "shift" | "radius" | "displacement",
+    value: number
+  ): void;
   onDelete(): void;
 }
 
-export default function GearController({
-  gear,
-  onChange,
-  onDelete
-}: GearControllerProps) {
-  const handleChange: any = (e: any) => {
-    onChange(e.target.name, e.target.value);
+function GearController({ gear, onChange, onDelete }: GearControllerProps) {
+  const handleChange: FormEventHandler = (e) => {
+    const target = e.target as HTMLInputElement;
+
+    onChange(
+      target.name as "speed" | "shift" | "radius" | "displacement",
+      Number(target.value)
+    );
   };
 
   return (
@@ -40,9 +44,9 @@ export default function GearController({
         />
         <Form.Control
           type="number"
-          name="displace"
-          placeholder="Displace"
-          defaultValue={gear.displace}
+          name="displacement"
+          placeholder="Displacement"
+          defaultValue={gear.displacement}
         />
         <Button
           variant="danger"
@@ -54,3 +58,5 @@ export default function GearController({
     </Form>
   );
 }
+
+export default GearController;

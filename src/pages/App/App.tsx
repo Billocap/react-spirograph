@@ -1,12 +1,10 @@
 import { Button, ButtonGroup } from "react-bootstrap";
 import { BsPlus } from "react-icons/bs";
 
-import useToggle from "../../hooks/useToggle";
-import { useGears } from "../../contexts/useGears";
-import Gear from "../../lib/Gear";
-
-import GearController from "../GearController";
-import SideMenu from "../SideMenu";
+import useToggle from "@hooks/useToggle";
+import { useGears } from "@contexts/useGears";
+import GearController from "@components/GearController";
+import SideMenu from "@components/SideMenu";
 
 import { Wrapper } from "./App.styles";
 
