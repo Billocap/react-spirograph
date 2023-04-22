@@ -13,7 +13,7 @@ export default function GearList({}: GearListProps) {
 
   return (
     <Wrapper>
-      <b>Gears</b>
+      Gears
       {gears.map((gear, id) => (
         <GearController
           key={gear.key}
