@@ -1,9 +1,8 @@
 import { Button, ButtonGroup } from "react-bootstrap";
-import { BsPlus } from "react-icons/bs";
 
 import useToggle from "@hooks/useToggle";
 import { useGears } from "@contexts/useGears";
-import GearController from "@components/GearController";
+import GearList from "@components/GearList";
 import SideMenu from "@components/SideMenu";
 
 import { Wrapper } from "./App.styles";
@@ -15,7 +14,7 @@ interface AppProps {
 export default function App({ onHide }: AppProps) {
   const menu = useToggle(false);
 
-  const { gears, addGear, editGear, removeGear } = useGears();
+  const { gears } = useGears();
 
   return (
     <Wrapper>
@@ -27,27 +26,7 @@ export default function App({ onHide }: AppProps) {
           onHide(gears);
         }}
       >
-        <p>Gears</p>
-        <div className="d-flex flex-column gap-3">
-          {gears.map((gear, id) => (
-            <GearController
-              key={gear.key}
-              gear={gear}
-              onChange={(key, value) => {
-                editGear(id, key, value);
-              }}
-              onDelete={() => {
-                removeGear(id);
-              }}
-            />
-          ))}
-          <Button
-            variant="light"
-            onClick={addGear}
-          >
-            <BsPlus />
-          </Button>
-        </div>
+        <GearList />
       </SideMenu>
       <ButtonGroup
         size="sm"
