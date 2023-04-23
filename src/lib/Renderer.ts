@@ -21,5 +21,6 @@ export default class Renderer {
     if (frameID > 0) cancelAnimationFrame(frameID);
 
     this.frameID = -1;
+    this.time = 0;
   }
 }

@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { GearsProvider } from "@contexts/useGears";
 import App from "@pages/App";
 import Renderer from "@lib/Renderer";
-import Drawer from "@lib/Drawer";
+import SpirographDrawer from "@drawers/SpirographDrawer";
 import SpirographModel from "@model/SpirographModel";
 
 import "./index.css";
@@ -26,13 +26,9 @@ window.onresize = function () {
   canvas.setAttribute("height", window.innerHeight.toString());
 };
 
-const drawer = new Drawer(ctx);
-
-const spirograph = new SpirographModel();
+const drawer = new SpirographDrawer(new SpirographModel(), ctx);
 
 const renderer = new Renderer();
-
-drawer.clear();
 
 ReactDOM.createRoot(ui).render(
   <GearsProvider>
@@ -40,11 +36,9 @@ ReactDOM.createRoot(ui).render(
       onHide={(gears) => {
         renderer.stop();
 
-        spirograph.gears = gears;
+        drawer.setup(gears);
 
-        drawer.clear();
-
-        renderer.play(() => drawer.render(spirograph));
+        renderer.play((time) => drawer.draw(time));
       }}
     />
   </GearsProvider>
