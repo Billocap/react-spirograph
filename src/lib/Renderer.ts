@@ -1,4 +1,4 @@
-class Renderer {
+export default class Renderer {
   private enabled: boolean;
 
   constructor() {
@@ -21,5 +21,3 @@ class Renderer {
     }
   }
 }
-
-export default Renderer;

@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { GearsProvider } from "@contexts/useGears";
 import App from "@pages/App";
 import Renderer from "@lib/Renderer";
+import Drawer from "@lib/Drawer";
 import SpirographModel from "@model/SpirographModel";
 
 import "./index.css";
@@ -25,31 +26,13 @@ window.onresize = function () {
   canvas.setAttribute("height", window.innerHeight.toString());
 };
 
-let i: number = 0;
-
-ctx.fillStyle = "gray";
-ctx.fillRect(0, 0, canvas.width, canvas.height);
+const drawer = new Drawer(ctx);
 
 const spirograph = new SpirographModel();
 
-function render(ctx: CanvasRenderingContext2D) {
-  ctx.fillStyle = "red";
-
-  const center = {
-    x: canvas.width / 2,
-    y: canvas.height / 2
-  };
-
-  const { x, y } = spirograph.evaluate(i, center);
-
-  ctx.beginPath();
-  ctx.arc(x, y, 1, 0, 2 * Math.PI);
-  ctx.fill();
-
-  i += 1 / 60;
-}
-
 let n: Renderer | null = null;
+
+drawer.clear();
 
 ReactDOM.createRoot(ui).render(
   <GearsProvider>
@@ -61,7 +44,9 @@ ReactDOM.createRoot(ui).render(
 
         n = new Renderer();
 
-        n.render(() => render(ctx));
+        drawer.clear();
+
+        n.render(() => drawer.render(spirograph));
       }}
     />
   </GearsProvider>
