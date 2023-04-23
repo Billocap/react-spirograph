@@ -1,23 +1,25 @@
 export default class Renderer {
-  private enabled: boolean;
+  private frameID: number;
+  private time: number;
 
   constructor() {
-    this.enabled = true;
+    this.frameID = -1;
+    this.time = 0;
   }
 
-  enable() {
-    this.enabled = true;
+  play(callback: (time: number) => void) {
+    callback(this.time);
+
+    this.time += 1 / 60;
+
+    this.frameID = requestAnimationFrame(() => this.play(callback));
   }
 
-  disable() {
-    this.enabled = false;
-  }
+  stop() {
+    const { frameID } = this;
 
-  render(callback: (...args: any[]) => void) {
-    callback();
+    if (frameID > 0) cancelAnimationFrame(frameID);
 
-    if (this.enabled) {
-      requestAnimationFrame(() => this.render(callback));
-    }
+    this.frameID = -1;
   }
 }

@@ -30,7 +30,7 @@ const drawer = new Drawer(ctx);
 
 const spirograph = new SpirographModel();
 
-let n: Renderer | null = null;
+const renderer = new Renderer();
 
 drawer.clear();
 
@@ -38,15 +38,13 @@ ReactDOM.createRoot(ui).render(
   <GearsProvider>
     <App
       onHide={(gears) => {
-        if (n) n.disable();
+        renderer.stop();
 
         spirograph.gears = gears;
 
-        n = new Renderer();
-
         drawer.clear();
 
-        n.render(() => drawer.render(spirograph));
+        renderer.play(() => drawer.render(spirograph));
       }}
     />
   </GearsProvider>
